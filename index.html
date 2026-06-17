@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<title>Scale26 · Wireframes</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Kalam:wght@400;700&family=Patrick+Hand&family=Architects+Daughter&family=Special+Elite&family=DM+Mono:wght@400;500&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #f0eee9; font-family: 'Patrick Hand', system-ui, sans-serif; }
+  /* Wireframe shared tokens */
+  :root {
+    --ink: #1a1714;
+    --ink-soft: #4a4540;
+    --ink-faint: #8a847d;
+    --paper: #fbfaf6;
+    --rule: #1a1714;
+    --accent: oklch(0.65 0.16 35); /* warm orange */
+  }
+  .wf { font-family: 'Patrick Hand', system-ui, sans-serif; color: var(--ink); background: var(--paper); }
+  .wf .h-hand { font-family: 'Caveat', cursive; font-weight: 700; letter-spacing: -0.01em; }
+  .wf .h-marker { font-family: 'Kalam', cursive; font-weight: 700; }
+  .wf .h-arch { font-family: 'Architects Daughter', cursive; }
+  .wf .h-mono { font-family: 'DM Mono', monospace; font-weight: 500; letter-spacing: 0.02em; }
+  .wf .h-serif { font-family: 'DM Serif Display', serif; }
+  .wf .h-typewriter { font-family: 'Special Elite', monospace; }
+
+  /* Sketchy borders: use double-stroke for a hand-drawn feel */
+  .sketch-box {
+    border: 2px solid var(--ink);
+    border-radius: 14px 16px 14px 18px / 16px 14px 18px 14px;
+    background: var(--paper);
+  }
+  .sketch-box.tight { border-radius: 10px 12px 10px 14px / 12px 10px 14px 10px; }
+  .sketch-dash {
+    border: 2px dashed var(--ink-soft);
+    border-radius: 14px 16px 14px 18px / 16px 14px 18px 14px;
+  }
+  .sketch-fill { background: #eee9e0; }
+  .sketch-fill-accent { background: color-mix(in oklab, var(--accent) 20%, var(--paper)); }
+
+  /* Placeholder block for "image goes here" */
+  .placeholder {
+    background:
+      repeating-linear-gradient(135deg, rgba(0,0,0,0.05) 0 8px, transparent 8px 16px),
+      #eee9e0;
+    border: 2px solid var(--ink-soft);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-soft); font-family: 'DM Mono', monospace; font-size: 12px;
+    text-align: center; padding: 8px;
+  }
+
+  .underline-wavy { text-decoration: underline wavy var(--accent); text-underline-offset: 4px; }
+  .scribble-bg {
+    background-image:
+      radial-gradient(circle at 20% 30%, color-mix(in oklab, var(--accent) 30%, transparent) 0%, transparent 14%),
+      radial-gradient(circle at 80% 70%, color-mix(in oklab, var(--accent) 22%, transparent) 0%, transparent 18%);
+  }
+
+  /* Pill button (sketchy) */
+  .btn-ink {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--ink); color: var(--paper);
+    padding: 10px 18px; border-radius: 999px;
+    font-family: 'Kalam', cursive; font-weight: 700; font-size: 16px;
+    box-shadow: 3px 3px 0 var(--ink);
+    border: 2px solid var(--ink);
+  }
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: transparent; color: var(--ink);
+    padding: 8px 14px; border-radius: 999px;
+    font-family: 'Kalam', cursive; font-weight: 700; font-size: 15px;
+    border: 2px solid var(--ink);
+  }
+  .btn-accent {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent); color: #fff;
+    padding: 10px 18px; border-radius: 999px;
+    font-family: 'Kalam', cursive; font-weight: 700; font-size: 16px;
+    box-shadow: 3px 3px 0 var(--ink);
+    border: 2px solid var(--ink);
+  }
+
+  /* Annotation note */
+  .annot {
+    font-family: 'Caveat', cursive; font-weight: 500;
+    color: var(--accent); font-size: 18px; line-height: 1.05;
+  }
+
+  /* Connector arrow scribbles */
+  .arrow-svg { color: var(--accent); }
+
+  /* Hide scrollbars inside artboards */
+  .wf::-webkit-scrollbar { width: 0; height: 0; }
+
+  /* The "tape" decoration */
+  .tape {
+    position: absolute;
+    background: color-mix(in oklab, var(--accent) 35%, #fff8c8);
+    width: 70px; height: 20px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    transform: rotate(-4deg);
+    opacity: 0.85;
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="wf-shared.jsx"></script>
+<script type="text/babel" src="wf-a-audit.jsx"></script>
+<script type="text/babel" src="wf-b-counter.jsx"></script>
+<script type="text/babel" src="wf-c-bento.jsx"></script>
+<script type="text/babel" src="wf-d-avantapres.jsx"></script>
+<script type="text/babel" src="wf-e-manifeste.jsx"></script>
+<script type="text/babel" src="wf-f-synthese.jsx"></script>
+<script type="text/babel" src="app.jsx"></script>
+</body>
+</html>

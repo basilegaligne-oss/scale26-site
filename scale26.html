@@ -1,0 +1,1246 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Scale26 · Automatisations pour PME</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* ───────── TOKENS ───────── */
+  :root {
+    --ink: #14110d;
+    --ink-2: #2a2521;
+    --ink-soft: #5a544c;
+    --ink-faint: #8a847b;
+    --rule: #1a1714;
+    --rule-soft: #d8d2c6;
+    --paper: #faf7f0;
+    --paper-2: #f0ebe0;
+    --paper-3: #1f1c17;
+    --accent: #c2410c;          /* warm clay, sober */
+    --accent-soft: #fbe9d9;
+    --accent-deep: #9a3208;
+
+    --serif: 'Instrument Serif', 'Times New Roman', serif;
+    --sans:  'Geist', system-ui, -apple-system, sans-serif;
+    --mono:  'Geist Mono', ui-monospace, monospace;
+
+    --max: 1280px;
+    --gutter: clamp(20px, 4vw, 56px);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--sans);
+    color: var(--ink);
+    background: var(--paper);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection { background: var(--ink); color: var(--paper); }
+
+  a { color: inherit; }
+  button { font: inherit; cursor: pointer; }
+
+  /* ───────── TYPE ───────── */
+  .serif { font-family: var(--serif); font-weight: 400; letter-spacing: -0.012em; }
+  .serif-italic { font-family: var(--serif); font-style: italic; font-weight: 400; }
+  .mono  { font-family: var(--mono); font-weight: 400; }
+
+  .kicker {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .kicker-muted {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  h1, h2, h3, p { margin: 0; }
+
+  .h-hero  { font-family: var(--serif); font-size: clamp(48px, 7vw, 96px); line-height: 0.95; letter-spacing: -0.025em; font-weight: 400; }
+  .h-major { font-family: var(--serif); font-size: clamp(36px, 5vw, 64px); line-height: 0.98; letter-spacing: -0.022em; font-weight: 400; }
+  .h-mid   { font-family: var(--serif); font-size: clamp(26px, 3vw, 38px); line-height: 1.08; letter-spacing: -0.018em; font-weight: 400; }
+  .h-small { font-family: var(--serif); font-size: 22px; line-height: 1.15; letter-spacing: -0.012em; font-weight: 400; }
+
+  .lede {
+    font-family: var(--mono);
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    max-width: 52ch;
+  }
+
+  /* ───────── LAYOUT ───────── */
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+  .section { padding: clamp(64px, 9vw, 112px) 0; border-bottom: 1px solid var(--ink); }
+  .section.tight { padding: clamp(40px, 6vw, 64px) 0; }
+  .section.paper-2 { background: var(--paper-2); }
+  .section.dark { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .section.dark .kicker-muted { color: rgba(250,247,240,0.55); }
+  .section.dark .lede { color: rgba(250,247,240,0.7); }
+
+  /* ───────── BUTTONS ───────── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 22px;
+    border: 1px solid var(--ink);
+    background: var(--ink); color: var(--paper);
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.06em;
+    text-decoration: none; text-transform: uppercase;
+    white-space: nowrap;
+    transition: transform .15s ease, background .2s ease, color .2s ease;
+  }
+  .btn:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
+  .btn .arr { transition: transform .2s ease; }
+  .btn:hover .arr { transform: translateX(3px); }
+
+  .btn-ghost {
+    background: transparent; color: var(--ink);
+  }
+  .btn-ghost:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .btn-accent {
+    background: var(--accent); border-color: var(--accent); color: var(--paper);
+    padding: 18px 28px; font-size: 14px;
+  }
+  .btn-accent:hover { background: var(--accent-deep); border-color: var(--accent-deep); }
+
+  .btn-light {
+    background: var(--paper); color: var(--ink); border-color: var(--paper);
+  }
+  .btn-light:hover { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+
+  /* ───────── GUARANTEE CHIP ───────── */
+  .chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 12px;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink);
+    background: var(--paper);
+  }
+  .chip svg { color: var(--accent); }
+  .chip.light { border-color: rgba(250,247,240,0.3); color: rgba(250,247,240,0.9); background: transparent; }
+  .chip.accent { background: var(--accent-soft); border-color: var(--accent-soft); color: var(--accent-deep); }
+
+  /* ───────── MASTHEAD ───────── */
+  .masthead {
+    border-bottom: 1px solid var(--ink);
+    background: var(--paper);
+  }
+  .masthead-top {
+    border-bottom: 1px solid var(--ink);
+    padding: 12px 0;
+  }
+  .masthead-top .wrap {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-soft);
+  }
+  .nav {
+    padding: 18px 0;
+    border-bottom: 3px double var(--ink);
+  }
+  .nav .wrap { display: flex; justify-content: space-between; align-items: center; }
+  .logo {
+    font-family: var(--serif);
+    font-size: 30px;
+    letter-spacing: -0.03em;
+  }
+  .logo .dot { color: var(--accent); }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a:not(.btn) {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    color: var(--ink);
+    position: relative;
+    white-space: nowrap;
+  }
+  .nav-links a:not(.btn):hover { color: var(--accent); }
+
+  /* ───────── HERO ───────── */
+  .hero { padding: clamp(56px, 8vw, 96px) 0 clamp(48px, 7vw, 80px); }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: clamp(32px, 5vw, 64px);
+    align-items: start;
+  }
+  .hero h1 { margin-top: 18px; }
+  .hero p.lede { margin-top: 24px; }
+
+  .hero-meta {
+    display: flex; align-items: center; gap: 14px;
+    margin-top: 32px;
+  }
+  .hero-meta image-slot { flex: 0 0 auto; }
+  .hero-meta-text {
+    font-family: var(--mono); font-size: 13px;
+    color: var(--ink-soft); line-height: 1.45;
+  }
+  .hero-meta-text b { color: var(--ink); font-weight: 500; }
+
+  .hero-quick {
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule-soft);
+    display: flex; gap: 36px; flex-wrap: wrap;
+  }
+  .hero-quick-item .n {
+    font-family: var(--serif); font-size: 26px; line-height: 1; letter-spacing: -0.015em;
+  }
+  .hero-quick-item .l {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--ink-soft); margin-top: 4px;
+  }
+
+  /* ───────── BOOKING WIDGET ───────── */
+  .booking {
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    padding: 24px;
+  }
+  .booking-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--rule-soft);
+    margin-bottom: 18px;
+  }
+  .booking-head .nav-arr {
+    display: inline-flex; gap: 10px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    color: var(--ink-soft);
+  }
+  .booking-head .nav-arr button {
+    width: 22px; height: 22px; border: 1px solid var(--ink); background: var(--paper);
+    color: var(--ink); padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: background .15s, color .15s;
+  }
+  .booking-head .nav-arr button:hover { background: var(--ink); color: var(--paper); }
+
+  .booking-days {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+    margin-bottom: 14px;
+  }
+  .booking-day {
+    text-align: center; padding: 10px 0;
+    border: 1px solid var(--ink); background: var(--paper); cursor: pointer;
+    transition: background .15s, color .15s;
+  }
+  .booking-day:hover { background: var(--paper-2); }
+  .booking-day .d { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; opacity: 0.6; }
+  .booking-day .n { font-family: var(--serif); font-size: 22px; line-height: 1; margin-top: 2px; }
+  .booking-day.active { background: var(--ink); color: var(--paper); }
+  .booking-day.active .d { opacity: 0.7; }
+
+  .booking-slots {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+    margin-bottom: 14px;
+  }
+  .booking-slot {
+    padding: 12px 14px;
+    display: flex; justify-content: space-between; align-items: center;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .booking-slot:hover { background: var(--paper-2); }
+  .booking-slot .t { font-family: var(--serif); font-size: 17px; }
+  .booking-slot .l { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--ink-soft); }
+  .booking-slot.selected { border-color: var(--accent); background: var(--accent-soft); }
+  .booking-slot.selected .l { color: var(--accent); }
+
+  .booking-cta {
+    width: 100%; padding: 16px;
+    background: var(--ink); color: var(--paper); border: none;
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.08em;
+    text-transform: uppercase; cursor: pointer;
+    transition: background .2s;
+  }
+  .booking-cta:hover { background: var(--accent); }
+  .booking-foot {
+    text-align: center; margin-top: 12px;
+    font-family: var(--mono); font-size: 11px; color: var(--ink-soft); letter-spacing: 0.04em;
+  }
+
+  /* ───────── STATS BAR ───────── */
+  .stats {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    padding: clamp(36px, 5vw, 52px) 0;
+  }
+  .stat { padding: 0 clamp(20px, 3vw, 40px); border-left: 1px solid var(--rule-soft); }
+  .stat:first-child { border-left: none; }
+  .stat .n { font-family: var(--serif); font-size: clamp(40px, 5vw, 60px); line-height: 1; letter-spacing: -0.025em; }
+  .stat .l { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 12px; color: var(--ink); }
+  .stat .s { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); margin-top: 4px; }
+
+  /* ───────── DIAGNOSTIC (where time goes) ───────── */
+  .diag-head { display: grid; grid-template-columns: 1fr 1.4fr; gap: clamp(24px, 4vw, 48px); align-items: start; }
+  .diag-rows { margin-top: 48px; display: grid; gap: 14px; }
+  .diag-row {
+    display: grid;
+    grid-template-columns: 40px 1.6fr 3fr auto;
+    gap: 20px; align-items: center;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .diag-row .rank { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--ink-soft); }
+  .diag-row .lbl { font-family: var(--serif); font-size: 19px; letter-spacing: -0.01em; }
+  .diag-row .bar {
+    position: relative; height: 26px;
+    border: 1px solid var(--ink); background: var(--paper);
+    overflow: hidden;
+  }
+  .diag-row .bar-fill {
+    height: 100%; background: var(--accent);
+    border-right: 1px solid var(--ink);
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 1.2s cubic-bezier(.2,.7,.2,1);
+  }
+  .diag-row.reveal .bar-fill { transform: scaleX(1); }
+  .diag-row .pct {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    font-family: var(--serif); font-size: 15px;
+    mix-blend-mode: difference; color: white;
+  }
+  .diag-row .eur { font-family: var(--mono); font-size: 12px; color: var(--ink-soft); letter-spacing: 0.04em; min-width: 120px; text-align: right; }
+
+  /* ───────── METHOD TIMELINE ───────── */
+  .method-head { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(24px, 4vw, 56px); align-items: end; margin-bottom: 48px; }
+  .method-steps { position: relative; }
+  .method-rule {
+    position: absolute; left: 60px; top: 20px; bottom: 20px; width: 1px;
+    background: var(--rule-soft);
+  }
+  .step {
+    display: grid; grid-template-columns: 120px 1fr; gap: 32px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid var(--ink); background: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-size: 18px;
+    margin-left: 40px;
+    position: relative; z-index: 1;
+    transition: background .2s, color .2s;
+  }
+  .step.first .step-num { background: var(--accent); color: var(--paper); border-color: var(--accent); }
+  .step:hover .step-num { background: var(--ink); color: var(--paper); }
+  .step-kicker { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .step-dur { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); letter-spacing: 0.1em; }
+  .step h3 { font-family: var(--serif); font-size: clamp(22px, 2.4vw, 30px); line-height: 1.1; letter-spacing: -0.018em; margin-top: 10px; max-width: 780px; font-weight: 400; }
+  .step p { font-family: var(--mono); font-size: 13.5px; color: var(--ink-soft); margin-top: 12px; line-height: 1.65; max-width: 740px; }
+
+  /* ───────── GUARANTEE BAND ───────── */
+  .guarantee {
+    background: var(--ink); color: var(--paper);
+    padding: clamp(40px, 6vw, 64px) 0;
+    border-bottom: 1px solid var(--ink);
+  }
+  .guarantee-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(28px, 5vw, 56px); align-items: center; }
+  .guarantee .h-major { font-style: italic; }
+  .guarantee-cards { display: grid; gap: 14px; }
+  .gcard {
+    padding: 20px 22px;
+    border: 1px solid rgba(250,247,240,0.22);
+  }
+  .gcard .kicker { color: var(--accent); }
+  .gcard h4 { font-family: var(--serif); font-size: 22px; font-weight: 400; letter-spacing: -0.012em; margin: 8px 0 8px; line-height: 1.15; }
+  .gcard p { font-family: var(--mono); font-size: 12.5px; line-height: 1.55; color: rgba(250,247,240,0.65); }
+
+  /* ───────── TESTIMONIALS ───────── */
+  .testi-head { margin-bottom: 40px; }
+  .testi-hero {
+    display: grid; grid-template-columns: 1.1fr 1fr;
+    gap: clamp(24px, 4vw, 40px);
+    align-items: stretch;
+  }
+  .testi-video {
+    position: relative; min-height: 380px;
+    background: var(--paper-2);
+    border: 1px solid var(--ink);
+  }
+  .testi-video image-slot { width: 100%; height: 100%; min-height: 380px; }
+  .testi-play {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+    pointer-events: none;
+  }
+  .testi-play .circle {
+    width: 70px; height: 70px; border-radius: 50%;
+    background: var(--paper); border: 1px solid var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+  }
+  .testi-play .tri {
+    width: 0; height: 0;
+    border-left: 18px solid var(--ink);
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    margin-left: 5px;
+  }
+  .testi-play .lbl { font-family: var(--mono); font-size: 11px; color: var(--ink); letter-spacing: 0.1em; text-align: center; background: var(--paper); padding: 4px 10px; }
+
+  .testi-quote { display: flex; flex-direction: column; justify-content: space-between; padding: 8px 0; }
+  .testi-quote .q { font-family: var(--serif); font-style: italic; font-size: clamp(22px, 2.6vw, 34px); line-height: 1.18; letter-spacing: -0.015em; margin-top: 14px; }
+  .testi-quote .who-block { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--rule-soft); }
+  .testi-quote .who { font-family: var(--serif); font-size: 20px; letter-spacing: -0.012em; }
+  .testi-quote .role { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); margin-top: 4px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .testi-quote .kpi { font-family: var(--mono); font-size: 12px; color: var(--ink-soft); margin-top: 14px; }
+  .testi-quote .kpi b { color: var(--ink); font-weight: 500; }
+
+  .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 48px; }
+  .testi-card {
+    padding: 28px;
+    border-left: 1px solid var(--rule-soft);
+  }
+  .testi-card:first-child { border-left: 1px solid var(--ink); }
+  .testi-card:last-child { border-right: 1px solid var(--ink); }
+  .testi-card .q { font-family: var(--serif); font-style: italic; font-size: 21px; line-height: 1.26; letter-spacing: -0.01em; }
+  .testi-card .meta { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--rule-soft); }
+  .testi-card .who { font-family: var(--serif); font-size: 17px; letter-spacing: -0.01em; }
+  .testi-card .role { font-family: var(--mono); font-size: 10px; color: var(--ink-soft); margin-top: 3px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .testi-card .kpi { font-family: var(--mono); font-size: 11px; color: var(--accent); margin-top: 10px; letter-spacing: 0.08em; }
+
+  /* ───────── CALCULATOR ───────── */
+  .calc-head h2 { max-width: 720px; }
+  .calc-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: clamp(28px, 4vw, 56px);
+    align-items: start;
+    margin-top: 40px;
+  }
+  .calc-shortcut { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--ink-soft); text-transform: uppercase; margin-bottom: 12px; }
+  .calc-presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+  .calc-preset {
+    padding: 10px 18px;
+    background: transparent; border: 1px solid var(--ink); color: var(--ink);
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em;
+    cursor: pointer; transition: all .15s;
+  }
+  .calc-preset:hover { background: var(--paper); }
+  .calc-preset.active { background: var(--ink); color: var(--paper); }
+
+  .calc-slider { margin-bottom: 26px; padding-bottom: 18px; border-bottom: 1px solid var(--rule-soft); }
+  .calc-slider:last-of-type { border-bottom: none; }
+  .calc-slider-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+  .calc-slider-row .lbl { font-family: var(--serif); font-size: 19px; letter-spacing: -0.01em; }
+  .calc-slider-row .v { font-family: var(--serif); font-size: 32px; line-height: 1; letter-spacing: -0.025em; }
+  .calc-slider input[type=range] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 4px;
+    background: var(--rule-soft); outline: none;
+    cursor: pointer;
+  }
+  .calc-slider input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--ink);
+    border: 3px solid var(--paper);
+    box-shadow: 0 0 0 1px var(--ink);
+    cursor: grab;
+    transition: transform .12s;
+  }
+  .calc-slider input[type=range]::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(1.15); background: var(--accent); }
+  .calc-slider input[type=range]::-moz-range-thumb {
+    width: 22px; height: 22px; border-radius: 50%; background: var(--ink);
+    border: 3px solid var(--paper); box-shadow: 0 0 0 1px var(--ink); cursor: grab;
+  }
+
+  .calc-result {
+    border: 1px solid var(--ink);
+    padding: clamp(28px, 4vw, 40px);
+    background: var(--paper);
+    position: sticky; top: 16px;
+  }
+  .calc-result .annual {
+    font-family: var(--serif); font-size: clamp(64px, 8vw, 92px);
+    line-height: 1; letter-spacing: -0.032em; margin: 14px 0 8px;
+    font-variant-numeric: tabular-nums;
+    transition: color .3s;
+  }
+  .calc-result.bump .annual { color: var(--accent); }
+  .calc-result .monthly { font-family: var(--mono); font-size: 14px; color: var(--ink-soft); }
+  .calc-result .monthly b { color: var(--ink); font-weight: 500; }
+  .calc-result .subgrid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+    margin-top: 28px; padding-top: 24px;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .calc-result .subgrid .n { font-family: var(--serif); font-size: 32px; line-height: 1; letter-spacing: -0.02em; }
+  .calc-result .subgrid .l { font-family: var(--mono); font-size: 10px; color: var(--ink-soft); letter-spacing: 0.12em; margin-top: 6px; text-transform: uppercase; }
+  .calc-result button.book {
+    width: 100%; padding: 18px;
+    background: var(--ink); color: var(--paper); border: none;
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.1em;
+    text-transform: uppercase; cursor: pointer;
+    margin-top: 28px; transition: background .2s;
+  }
+  .calc-result button.book:hover { background: var(--accent); }
+  .calc-result .chip-wrap { text-align: center; margin-top: 14px; }
+  .calc-result .hyp { font-family: var(--mono); font-size: 10px; color: var(--ink-faint); margin-top: 16px; text-align: center; letter-spacing: 0.04em; }
+
+  /* ───────── FAQ ───────── */
+  .faq-list { margin-top: 36px; border-top: 1px solid var(--ink); }
+  .faq-item {
+    border-bottom: 1px solid var(--rule-soft);
+    padding: 22px 0;
+    cursor: pointer;
+  }
+  .faq-row {
+    display: grid; grid-template-columns: 40px 1fr 30px; gap: 18px;
+    align-items: start;
+  }
+  .faq-num { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); letter-spacing: 0.1em; padding-top: 6px; }
+  .faq-q { font-family: var(--serif); font-size: clamp(20px, 2vw, 24px); letter-spacing: -0.015em; line-height: 1.2; transition: color .2s; }
+  .faq-item:hover .faq-q { color: var(--accent); }
+  .faq-toggle {
+    font-family: var(--serif); font-size: 32px; line-height: 0.8;
+    color: var(--ink-soft); text-align: right;
+    transition: transform .25s, color .2s;
+  }
+  .faq-item:hover .faq-toggle { color: var(--accent); }
+  .faq-item.open .faq-toggle { transform: rotate(45deg); }
+  .faq-a {
+    font-family: var(--mono); font-size: 13.5px; color: var(--ink-soft);
+    line-height: 1.7; margin-top: 0;
+    max-height: 0; overflow: hidden;
+    transition: max-height .35s ease, margin-top .35s ease;
+  }
+  .faq-item.open .faq-a { max-height: 200px; margin-top: 12px; }
+
+  /* ───────── FINAL CTA ───────── */
+  .final {
+    padding: clamp(80px, 12vw, 144px) 0;
+    text-align: center;
+    background: var(--ink); color: var(--paper);
+    border-bottom: 1px solid var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .final::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(194,65,12,0.15), transparent 60%);
+    pointer-events: none;
+  }
+  .final h2 { max-width: 880px; margin: 18px auto 24px; position: relative; }
+  .final p { margin: 0 auto 36px; position: relative; }
+  .final-actions { display: inline-flex; flex-direction: column; align-items: center; gap: 20px; position: relative; }
+  .final-actions-row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; justify-content: center; }
+  .final-actions-row .email-line { font-family: var(--mono); font-size: 12px; color: rgba(250,247,240,0.55); letter-spacing: 0.04em; }
+  .final-actions-row .email-line u { text-underline-offset: 3px; }
+
+  /* ───────── FOOTER ───────── */
+  .foot {
+    padding: 24px 0;
+    background: var(--paper);
+  }
+  .foot .wrap {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-size: 11px; color: var(--ink-soft);
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+
+  /* ───────── IMAGE SLOTS ───────── */
+  image-slot {
+    --is-bg: var(--paper-2);
+    --is-text: var(--ink-soft);
+    --is-border: var(--ink);
+  }
+
+  /* ───────── REVEAL ON SCROLL ───────── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1);
+  }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* ───────── RESPONSIVE ───────── */
+  @media (max-width: 900px) {
+    .hero-grid, .diag-head, .method-head, .testi-hero, .calc-grid, .guarantee-grid {
+      grid-template-columns: 1fr;
+    }
+    .stats { grid-template-columns: repeat(2, 1fr); gap: 28px 0; }
+    .stat { padding: 0 20px; }
+    .stat:nth-child(3) { border-left: none; }
+    .testi-grid { grid-template-columns: 1fr; }
+    .testi-card { border-left: 1px solid var(--ink) !important; border-right: 1px solid var(--ink); border-bottom: none; }
+    .testi-card:not(:last-child) { border-bottom: 1px solid var(--rule-soft); }
+    .diag-row { grid-template-columns: 30px 1fr; gap: 12px; }
+    .diag-row .bar { grid-column: 1 / -1; }
+    .diag-row .eur { grid-column: 1 / -1; text-align: left; }
+    .method-rule { display: none; }
+    .step { grid-template-columns: 1fr; gap: 8px; }
+    .step-num { margin-left: 0; }
+    .calc-result { position: relative; top: 0; }
+    .nav-links { gap: 14px; }
+    .nav-links a:not(.btn) { display: none; }
+    .nav-links .btn { padding: 10px 14px; font-size: 11px; }
+  }
+
+  /* tweaks panel hooks */
+  [data-section] { transition: opacity .3s; }
+  [data-section].hidden-section { display: none; }
+</style>
+</head>
+
+<body>
+
+<!-- ───────── MASTHEAD ───────── -->
+<header class="masthead">
+  <div class="masthead-top">
+    <div class="wrap">
+      <span>SCALE26 · AUTOMATISATIONS POUR PME DE 5 À 30 PERSONNES</span>
+      <span>NOV. 2026</span>
+    </div>
+  </div>
+  <nav class="nav">
+    <div class="wrap">
+      <a href="#" class="logo">Scale26<span class="dot">.</span></a>
+      <div class="nav-links">
+        <a href="#methode">La méthode</a>
+        <a href="#cas">Cas clients</a>
+        <a href="#calcul">Votre cas</a>
+        <a href="#faq">FAQ</a>
+        <a href="#audit" class="btn">Réserver mon audit <span class="arr">→</span></a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- ───────── HERO ───────── -->
+<section class="hero" data-section="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="kicker">Chapitre 01 — L'audit gratuit</div>
+        <h1 class="h-hero">
+          On regarde ensemble<br>
+          <span class="serif-italic">où vous perdez</span> du temps.
+        </h1>
+        <p class="lede">
+          30 minutes, en visio. Vous me racontez votre semaine. Je vous dis combien d'euros vous laissez sur la table chaque mois — et ce qui vaut vraiment la peine d'être automatisé chez vous.
+        </p>
+
+        <div class="hero-meta">
+          <image-slot id="founder-portrait" shape="circle" style="width:52px;height:52px;" placeholder="Photo fondateur"></image-slot>
+          <div class="hero-meta-text">
+            avec <b>[ton prénom]</b><br>
+            <span style="font-size:11px;">fondateur · répond en moins de 4 h</span>
+          </div>
+        </div>
+
+        <div class="hero-quick">
+          <div class="hero-quick-item"><div class="n">30 min</div><div class="l">Durée</div></div>
+          <div class="hero-quick-item"><div class="n">Gratuit</div><div class="l">Vraiment</div></div>
+          <div class="hero-quick-item"><div class="n">Sans engagement</div><div class="l">Aucun</div></div>
+        </div>
+      </div>
+
+      <!-- Booking widget -->
+      <div class="booking" id="audit">
+        <div class="booking-head">
+          <div class="h-small">Choisissez un créneau.</div>
+          <div class="nav-arr">
+            <button aria-label="précédent">‹</button>
+            <span style="align-self:center;">SEM. DU 16 NOV</span>
+            <button aria-label="suivant">›</button>
+          </div>
+        </div>
+
+        <div class="booking-days" id="booking-days">
+          <button class="booking-day"><div class="d">LUN</div><div class="n">16</div></button>
+          <button class="booking-day"><div class="d">MAR</div><div class="n">17</div></button>
+          <button class="booking-day active"><div class="d">MER</div><div class="n">18</div></button>
+          <button class="booking-day"><div class="d">JEU</div><div class="n">19</div></button>
+          <button class="booking-day"><div class="d">VEN</div><div class="n">20</div></button>
+        </div>
+
+        <div class="booking-slots" id="booking-slots">
+          <button class="booking-slot"><span class="t">09:30</span><span class="l">LIBRE</span></button>
+          <button class="booking-slot selected"><span class="t">10:30</span><span class="l">→ CHOISI</span></button>
+          <button class="booking-slot"><span class="t">14:00</span><span class="l">LIBRE</span></button>
+          <button class="booking-slot"><span class="t">15:30</span><span class="l">LIBRE</span></button>
+          <button class="booking-slot"><span class="t">17:00</span><span class="l">LIBRE</span></button>
+          <button class="booking-slot"><span class="t">18:00</span><span class="l">LIBRE</span></button>
+        </div>
+
+        <button class="booking-cta">Réserver mer. 18 nov · 10:30 →</button>
+        <div class="booking-foot">ou laissez-moi votre email — je vous propose des créneaux ↓</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── STATS ───────── -->
+<section class="section tight paper-2" data-section="stats" style="padding-top:0; padding-bottom:0;">
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat reveal"><div class="n">+12 h</div><div class="l">Gagnées / semaine</div><div class="s">En moyenne par PME</div></div>
+      <div class="stat reveal"><div class="n">~3 470€</div><div class="l">Récupérés / mois</div><div class="s">Pour 15 collaborateurs</div></div>
+      <div class="stat reveal"><div class="n">&lt; 4 sem.</div><div class="l">Avant gain mesurable</div><div class="s">Sur 8 audits sur 10</div></div>
+      <div class="stat reveal"><div class="n">×4</div><div class="l">Retour sur invest.</div><div class="s">À 6 mois</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── DIAGNOSTIC ───────── -->
+<section class="section paper-2" data-section="diagnostic" id="diagnostic">
+  <div class="wrap">
+    <div class="kicker">Chapitre 02 — Le diagnostic</div>
+    <div class="diag-head" style="margin-top:14px;">
+      <h2 class="h-major">Où part le temps<br>de vos équipes.</h2>
+      <p class="lede" style="padding-top:14px;">
+        Cinq tâches mangent en moyenne <b style="color:var(--ink);">60 % du temps "administratif"</b> dans une PME de 15 personnes. Ce sont aussi celles qui s'automatisent le plus facilement — et donc celles par lesquelles on commence.
+      </p>
+    </div>
+
+    <div class="diag-rows" id="diag-rows">
+      <div class="diag-row reveal" data-pct="32">
+        <div class="rank">01</div>
+        <div class="lbl">Relances clients & factures</div>
+        <div class="bar"><div class="bar-fill" style="width:80%;"></div><div class="pct">32%</div></div>
+        <div class="eur">≈ 1 200€ / mois</div>
+      </div>
+      <div class="diag-row reveal" data-pct="24">
+        <div class="rank">02</div>
+        <div class="lbl">Ressaisie de mails vers CRM / Excel</div>
+        <div class="bar"><div class="bar-fill" style="width:60%; background:#e06d31;"></div><div class="pct">24%</div></div>
+        <div class="eur">≈ 900€ / mois</div>
+      </div>
+      <div class="diag-row reveal" data-pct="18">
+        <div class="rank">03</div>
+        <div class="lbl">Devis & docs commerciaux répétés</div>
+        <div class="bar"><div class="bar-fill" style="width:45%; background:#e89863;"></div><div class="pct">18%</div></div>
+        <div class="eur">≈ 680€ / mois</div>
+      </div>
+      <div class="diag-row reveal" data-pct="14">
+        <div class="rank">04</div>
+        <div class="lbl">Reporting fait à la main</div>
+        <div class="bar"><div class="bar-fill" style="width:35%; background:#edb38c;"></div><div class="pct">14%</div></div>
+        <div class="eur">≈ 520€ / mois</div>
+      </div>
+      <div class="diag-row reveal" data-pct="12">
+        <div class="rank">05</div>
+        <div class="lbl">Petites tâches diverses (RH, archivage, planning)</div>
+        <div class="bar"><div class="bar-fill" style="width:30%; background:#f0c4a7;"></div><div class="pct">12%</div></div>
+        <div class="eur">≈ 450€ / mois</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── METHOD ───────── -->
+<section class="section" data-section="methode" id="methode">
+  <div class="wrap">
+    <div class="method-head">
+      <div>
+        <div class="kicker">Chapitre 03 — La méthode</div>
+        <h2 class="h-major" style="margin-top:14px;">
+          Quatre étapes.<br>
+          <span class="serif-italic">Aucune obligation</span><br>
+          au-delà de la première.
+        </h2>
+      </div>
+      <p class="lede" style="align-self:end;">
+        On commence par <b style="color:var(--ink);">30 minutes de discussion gratuites</b>. Vous décidez ensuite si on continue. Et si on continue, vous savez exactement ce qu'on fait, quand, et combien ça coûte.
+      </p>
+    </div>
+
+    <div class="method-steps">
+      <div class="method-rule"></div>
+
+      <div class="step first reveal">
+        <div class="step-num">01</div>
+        <div>
+          <div class="step-kicker">
+            <span class="kicker">L'audit</span>
+            <span class="step-dur">· 30 min · gratuit</span>
+          </div>
+          <h3>On parle de votre secteur et de ce qui vous mange la journée.</h3>
+          <p>Je vous pose des questions concrètes : quelles sont vos tâches récurrentes ? Qui les fait ? Combien de temps ça prend ? Lesquelles peuvent être automatisées, lesquelles ne le peuvent pas — et c'est OK aussi.</p>
+        </div>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-num">02</div>
+        <div>
+          <div class="step-kicker">
+            <span class="kicker">La proposition</span>
+            <span class="step-dur">· sous 5 jours</span>
+          </div>
+          <h3>Je reviens vers vous avec un plan chiffré — ou je vous dis qu'il n'y a rien à faire.</h3>
+          <p>On ne vous vend pas "de l'IA". Si je trouve 2-3 automatisations rentables, je vous fais une proposition claire : ce qui sera installé, en combien de temps, pour combien d'euros. Si rien ne mérite d'être automatisé chez vous, je vous le dis honnêtement. Pas de devis envoyé "au cas où".</p>
+        </div>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-num">03</div>
+        <div>
+          <div class="step-kicker">
+            <span class="kicker">L'installation</span>
+            <span class="step-dur">· 2 à 4 sem.</span>
+          </div>
+          <h3>On installe chez vous. Vos équipes sont formées. Vous testez en vrai.</h3>
+          <p>On déploie sur vos outils existants (votre CRM, vos mails, Notion, Excel, votre logiciel métier). On forme la personne qui sera référente en interne. Vous validez chaque flux avant qu'il passe en production.</p>
+        </div>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-num">04</div>
+        <div>
+          <div class="step-kicker">
+            <span class="kicker">L'autonomie</span>
+            <span class="step-dur">· la suite</span>
+          </div>
+          <h3>C'est à vous. Les flux tournent seuls. Je reste joignable au besoin.</h3>
+          <p>Pas de dépendance, pas d'abonnement obligatoire. Vous avez la documentation, les accès, le contrôle. Si quelque chose casse ou si vous voulez itérer, je suis là — mais vous n'êtes jamais obligé de revenir.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── GUARANTEE ───────── -->
+<section class="guarantee" data-section="guarantee">
+  <div class="wrap">
+    <div class="guarantee-grid">
+      <div>
+        <div class="kicker" style="margin-bottom:18px;">Notre engagement</div>
+        <h2 class="h-major">
+          « On ne vous vend pas "de l'IA". On vous rend des heures et de l'argent. <span class="serif-italic">Et si on n'y arrive pas, on vous rembourse.</span> »
+        </h2>
+      </div>
+
+      <div class="guarantee-cards">
+        <div class="gcard">
+          <div class="kicker">Garantie 01</div>
+          <h4>Satisfait ou remboursé.</h4>
+          <p>Si on ne tient pas les chiffres annoncés en audit, on vous rembourse intégralement. Sans discussion.</p>
+        </div>
+        <div class="gcard">
+          <div class="kicker">Garantie 02</div>
+          <h4>Audit gratuit, vraiment.</h4>
+          <p>Pas de "premier mois à 49€". Pas de relances commerciales. Vous repartez avec mes notes — point.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── TESTIMONIALS ───────── -->
+<section class="section" data-section="testimonials" id="cas">
+  <div class="wrap">
+    <div class="testi-head">
+      <div class="kicker">Chapitre 04 — Ils l'ont fait</div>
+      <h2 class="h-major" style="margin-top:14px; max-width: 780px;">
+        Ce qu'en disent ceux<br>avec qui on a travaillé.
+      </h2>
+    </div>
+
+    <div class="testi-hero">
+      <div class="testi-video">
+        <image-slot id="testi-video" shape="rect" placeholder=""></image-slot>
+        <div class="testi-play">
+          <div class="circle"><div class="tri"></div></div>
+          <div class="lbl">VIDÉO TÉMOIGNAGE · 1 min 40</div>
+        </div>
+      </div>
+
+      <div class="testi-quote">
+        <div>
+          <div class="kicker">Témoignage principal</div>
+          <div class="q">« On a libéré 8 heures par semaine sur les relances et la facturation. C'est l'équivalent d'un mi-temps qu'on n'a pas eu à recruter. »</div>
+        </div>
+        <div class="who-block">
+          <div class="who">Mathilde Lacombe</div>
+          <div class="role">Gérante · Agence de comm · 11 pers.</div>
+          <div class="kpi">Économie mesurée : <b>~ 2 600€ / mois</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="q">« L'audit était vraiment gratuit. J'ai pris parce qu'on s'est compris, pas parce qu'on m'a pressuré. »</div>
+        <div class="meta">
+          <div class="who">Claire Voisin</div>
+          <div class="role">Cabinet conseil · 8 pers.</div>
+          <div class="kpi">↗ + 6h / semaine</div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="q">« ROI rapide. En 6 semaines on était à l'équilibre, et au bout de 6 mois on avait remboursé 4 fois la mise. »</div>
+        <div class="meta">
+          <div class="who">Karim Bensaïd</div>
+          <div class="role">BTP · 22 pers.</div>
+          <div class="kpi">↗ ×4 ROI à 6 mois</div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="q">« On a arrêté de retaper les mêmes dossiers 30 fois. Mes juristes font enfin du droit, pas du copier-coller. »</div>
+        <div class="meta">
+          <div class="who">Anne Dubois</div>
+          <div class="role">Cabinet juridique · 14 pers.</div>
+          <div class="kpi">↗ + 12h / semaine</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 48px; text-align: center;">
+      <span class="chip accent">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6.5 L5 9 L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Satisfait ou remboursé · garanti par contrat
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── CALCULATOR ───────── -->
+<section class="section paper-2" data-section="calculator" id="calcul">
+  <div class="wrap">
+    <div class="kicker">Chapitre 05 — Votre cas</div>
+    <div class="calc-head">
+      <h2 class="h-major" style="margin-top:14px;">
+        Combien vous gagnez,<br>
+        <span class="serif-italic">en vrai.</span>
+      </h2>
+      <p class="lede" style="margin-top: 22px;">
+        Ajustez les trois variables qui comptent pour vous. On calcule en direct le retour annuel estimé sur votre cas.
+      </p>
+    </div>
+
+    <div class="calc-grid">
+      <div>
+        <div class="calc-shortcut">Raccourci · taille équipe</div>
+        <div class="calc-presets" id="calc-presets">
+          <button class="calc-preset" data-team="5">5 pers.</button>
+          <button class="calc-preset active" data-team="15">15 pers.</button>
+          <button class="calc-preset" data-team="30">30 pers.</button>
+          <button class="calc-preset" data-team="50">50 pers.</button>
+        </div>
+
+        <div class="calc-slider">
+          <div class="calc-slider-row">
+            <span class="lbl">Taille de l'équipe</span>
+            <span class="v"><span id="v-team">15</span> pers.</span>
+          </div>
+          <input type="range" min="3" max="60" value="15" id="r-team" />
+        </div>
+
+        <div class="calc-slider">
+          <div class="calc-slider-row">
+            <span class="lbl">Heures perdues / pers / sem.</span>
+            <span class="v"><span id="v-hours">7</span> h</span>
+          </div>
+          <input type="range" min="1" max="20" value="7" id="r-hours" />
+        </div>
+
+        <div class="calc-slider">
+          <div class="calc-slider-row">
+            <span class="lbl">Coût horaire chargé moyen</span>
+            <span class="v"><span id="v-cost">38</span> €</span>
+          </div>
+          <input type="range" min="20" max="100" value="38" id="r-cost" />
+        </div>
+      </div>
+
+      <div class="calc-result" id="calc-result">
+        <div class="kicker-muted">Votre économie annuelle estimée</div>
+        <div class="annual"><span id="v-annual">41 600</span> €</div>
+        <div class="monthly">soit <b><span id="v-monthly">3 470</span> €</b> par mois récupérés sur la trésorerie</div>
+
+        <div class="subgrid">
+          <div>
+            <div class="n"><span id="v-hrs">4 935</span> h</div>
+            <div class="l">Gagnées / an</div>
+          </div>
+          <div>
+            <div class="n">≈ <span id="v-wks">4</span> sem.</div>
+            <div class="l">D'équipe libérées</div>
+          </div>
+        </div>
+
+        <button class="book">Vérifier ce chiffre en audit gratuit →</button>
+
+        <div class="chip-wrap">
+          <span class="chip">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6.5 L5 9 L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Satisfait ou remboursé
+          </span>
+        </div>
+        <div class="hyp">Hypothèses : ~47 sem. de travail · données moyennes PME.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── FAQ ───────── -->
+<section class="section" data-section="faq" id="faq">
+  <div class="wrap">
+    <div class="kicker">Chapitre 06 — Vos questions</div>
+    <h2 class="h-major" style="margin-top:14px;">Tout ce qu'on me demande.</h2>
+
+    <div class="faq-list" id="faq-list">
+      <div class="faq-item open">
+        <div class="faq-row">
+          <div class="faq-num">01</div>
+          <div>
+            <div class="faq-q">C'est quoi, concrètement, « automatiser » ?</div>
+            <div class="faq-a">Quand une tâche que vous faites à la main est répétée plusieurs fois par semaine, on peut la déléguer à un système qui s'en occupe tout seul, 24h/24. Concrètement : envoyer une relance, créer un devis, mettre à jour un tableau, archiver une facture. Vous gardez la main, vous voyez tout ce qui se passe.</div>
+          </div>
+          <div class="faq-toggle">+</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-row">
+          <div class="faq-num">02</div>
+          <div>
+            <div class="faq-q">Je n'ai pas de DSI ni d'équipe tech. Vous travaillez quand même avec moi ?</div>
+            <div class="faq-a">Oui — c'est même 100 % de nos clients. On installe les outils sur les logiciels que vous utilisez déjà. On forme la personne référente en interne (souvent vous, ou votre office manager). Et je reste joignable.</div>
+          </div>
+          <div class="faq-toggle">+</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-row">
+          <div class="faq-num">03</div>
+          <div>
+            <div class="faq-q">Combien ça coûte une fois sorti de l'audit ?</div>
+            <div class="faq-a">Selon votre cas, entre 2 500 et 12 000€ pour un premier projet. Le ROI moyen est de 4 fois la mise sur 6 mois. On vous chiffre tout avant que vous décidiez quoi que ce soit.</div>
+          </div>
+          <div class="faq-toggle">+</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-row">
+          <div class="faq-num">04</div>
+          <div>
+            <div class="faq-q">Et si finalement rien n'est rentable à automatiser chez moi ?</div>
+            <div class="faq-a">Je vous le dis. C'est arrivé. Vous repartez avec mes notes et on en reste là — sans facture, sans relance commerciale.</div>
+          </div>
+          <div class="faq-toggle">+</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-row">
+          <div class="faq-num">05</div>
+          <div>
+            <div class="faq-q">Combien de temps avant le premier gain mesurable ?</div>
+            <div class="faq-a">En moyenne 3 à 4 semaines après le démarrage. Le premier flux automatisé tourne souvent dès la 2e semaine, et vous voyez l'impact sur votre semaine la semaine suivante.</div>
+          </div>
+          <div class="faq-toggle">+</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-row">
+          <div class="faq-num">06</div>
+          <div>
+            <div class="faq-q">Comment fonctionne la garantie « satisfait ou remboursé » ?</div>
+            <div class="faq-a">Si les chiffres annoncés en audit (heures gagnées, économies en €) ne sont pas atteints 3 mois après la mise en production, on vous rembourse intégralement la prestation. C'est écrit dans le contrat, pas dans la marketing.</div>
+          </div>
+          <div class="faq-toggle">+</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-row">
+          <div class="faq-num">07</div>
+          <div>
+            <div class="faq-q">Mes données sont-elles en sécurité ?</div>
+            <div class="faq-a">On utilise vos outils existants (Google Workspace, Microsoft 365, votre CRM, votre logiciel métier). Aucune donnée ne sort de votre périmètre sans que vous l'ayez explicitement validé. Hébergement européen, RGPD.</div>
+          </div>
+          <div class="faq-toggle">+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── FINAL CTA ───────── -->
+<section class="final" data-section="final">
+  <div class="wrap">
+    <div class="kicker" style="color: var(--accent);">Dernier mot</div>
+    <h2 class="h-hero">
+      30 minutes pour savoir<br>
+      <span class="serif-italic">combien vous laissez sur la table.</span>
+    </h2>
+    <p class="lede" style="text-align: center; margin-left: auto; margin-right: auto;">
+      Gratuit. Sans engagement. Vous repartez avec un plan d'action — même si on ne travaille pas ensemble.
+    </p>
+
+    <div class="final-actions">
+      <div class="final-actions-row">
+        <a href="#audit" class="btn btn-accent">
+          Réserver mon audit gratuit <span class="arr">→</span>
+        </a>
+        <span class="email-line">ou écrivez-moi à <u>hello@scale26.fr</u></span>
+      </div>
+
+      <span class="chip light">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6.5 L5 9 L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Satisfait ou remboursé · garanti par contrat
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── FOOTER ───────── -->
+<footer class="foot">
+  <div class="wrap">
+    <span>Scale26 · Automatisations pour PME · 2026</span>
+    <span>Mentions · Confidentialité · Contact</span>
+  </div>
+</footer>
+
+<!-- ───────── IMAGE SLOT WC ───────── -->
+<script src="image-slot.js"></script>
+
+<!-- ───────── SCRIPTS ───────── -->
+<script>
+  // ── Reveal on scroll ─────────────────────────
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.18 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ── FAQ accordion ────────────────────────────
+  document.querySelectorAll('.faq-item').forEach(item => {
+    item.addEventListener('click', () => {
+      item.classList.toggle('open');
+      item.querySelector('.faq-toggle').textContent = item.classList.contains('open') ? '−' : '+';
+    });
+  });
+
+  // ── Booking day toggle ──────────────────────
+  document.querySelectorAll('#booking-days .booking-day').forEach(d => {
+    d.addEventListener('click', () => {
+      document.querySelectorAll('#booking-days .booking-day').forEach(x => x.classList.remove('active'));
+      d.classList.add('active');
+    });
+  });
+  document.querySelectorAll('#booking-slots .booking-slot').forEach(s => {
+    s.addEventListener('click', () => {
+      document.querySelectorAll('#booking-slots .booking-slot').forEach(x => {
+        x.classList.remove('selected');
+        x.querySelector('.l').textContent = 'LIBRE';
+      });
+      s.classList.add('selected');
+      s.querySelector('.l').textContent = '→ CHOISI';
+    });
+  });
+
+  // ── Calculator ───────────────────────────────
+  const rTeam = document.getElementById('r-team');
+  const rHours = document.getElementById('r-hours');
+  const rCost = document.getElementById('r-cost');
+  const result = document.getElementById('calc-result');
+  let bumpTimeout;
+
+  function fmt(n) { return Math.round(n).toLocaleString('fr-FR'); }
+
+  function compute() {
+    const team = +rTeam.value;
+    const h = +rHours.value;
+    const c = +rCost.value;
+
+    // ~47 working weeks, only 70% of waste recoverable (realistic, not over-promising)
+    const annual = Math.round(team * h * c * 47 * 0.70);
+    const monthly = Math.round(annual / 12);
+    const totalHrs = team * h * 47;
+    const recoveredHrs = Math.round(totalHrs * 0.70);
+    const wks = Math.max(1, Math.round(recoveredHrs / (team * 35)));
+
+    document.getElementById('v-team').textContent = team;
+    document.getElementById('v-hours').textContent = h;
+    document.getElementById('v-cost').textContent = c;
+    document.getElementById('v-annual').textContent = fmt(annual);
+    document.getElementById('v-monthly').textContent = fmt(monthly);
+    document.getElementById('v-hrs').textContent = fmt(recoveredHrs);
+    document.getElementById('v-wks').textContent = wks;
+
+    // sync preset buttons
+    document.querySelectorAll('.calc-preset').forEach(b => {
+      b.classList.toggle('active', +b.dataset.team === team);
+    });
+
+    // little flash on result
+    clearTimeout(bumpTimeout);
+    result.classList.add('bump');
+    bumpTimeout = setTimeout(() => result.classList.remove('bump'), 300);
+  }
+
+  [rTeam, rHours, rCost].forEach(r => r.addEventListener('input', compute));
+
+  document.querySelectorAll('.calc-preset').forEach(b => {
+    b.addEventListener('click', () => {
+      rTeam.value = b.dataset.team;
+      compute();
+    });
+  });
+
+  // initial
+  compute();
+
+  // ── Smooth scroll for nav links ──────────────
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const id = a.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (el) {
+        e.preventDefault();
+        window.scrollTo({ top: el.offsetTop - 20, behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+
+<!-- ───────── TWEAKS PANEL ───────── -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="tweaks-app.jsx"></script>
+
+<div id="tweaks-root"></div>
+
+</body>
+</html>
